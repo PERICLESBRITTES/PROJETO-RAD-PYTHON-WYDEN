@@ -1,0 +1,121 @@
+import tkinter as tk
+from tkinter import messagebox
+
+# Função que realiza os cálculos
+def calcular():
+    try:
+        ini1 = float(entry_invest_inicial.get())
+        apo1 = float(entry_aporte_mensal.get())
+        anos = int(entry_anos.get())
+        val_acao1 = float(entry_valor_acao.get())
+        d_yield1 = float(entry_div_yield.get())
+        dividendo1 = float(entry_dividendo.get())
+        
+        temp1 = anos
+        temp2 = (temp1 * 12)
+
+        prco_teto_med1 = round(dividendo1 / 0.06, 2)
+        resultado_teto.config(text=f"O preço teto médio da ação é de R$ {prco_teto_med1} Reais")
+
+        quant1 = round(ini1 / val_acao1, 2)
+        quant2 = round(apo1 / val_acao1, 2)
+        resultado_quant_acao.config(text=f"Você comprará aproximadamente {quant1} ações com o aporte inicial e {quant2} ações por mês.")
+
+        d_yield_medio = round(d_yield1, 2)
+        resultado_yield_medio.config(text=f"Dividendo médio do conjunto: {d_yield_medio}%")
+
+        val_acao = round(val_acao1, 2)
+        dividendo = round(dividendo1, 2)
+        resultado_dividendo.config(text=f"Você receberá R$ {dividendo} em dividendos ao ano por cada ação.")
+
+        val1 = round(((ini1 * dividendo) / val_acao), 0)
+        val2 = round(((apo1 * dividendo) / val_acao), 0)
+
+        resultado_valores.config(text=f"Aporte inicial dará R$ {val1} em dividendos/ano.\nAporte mensal dará R$ {val2} em dividendos/ano.")
+
+        for _ in range(temp1):
+            ini2 = float(((val1 * val1) / ini1))
+            ini3 = ini1 + ini2 + val1
+
+        for _ in range(temp2):
+            apo2 = float(((val2 * val2) / apo1))
+            apo3 = apo1 + apo2 + val2
+
+        val1 *= temp1
+        val2 *= temp2
+        val3 = ini3 + apo3 + val1 + val2
+
+        quant3 = round(val3 / val_acao1, 0)
+        resultado_final_acao.config(text=f"Você terá comprado um total de {quant3} ações após {temp1} anos.")
+
+        aposentadoria1 = round(val3, 2)
+        aposentadoria2 = round(val3 / 12, 2)
+        aposentadoria3 = round(val3 / 22, 2)
+        aposentadoria4 = round(val3 / 23, 2)
+        aposentadoria5 = round(val3 / 30, 2)
+
+        resultado_aposentadoria.config(
+            text=f"Sua aposentadoria anual: R$ {aposentadoria1}\n"
+                 f"Mensal (12 meses): R$ {aposentadoria2}\n"
+                 f"Mensal (22 meses): R$ {aposentadoria3}\n"
+                 f"Mensal (23 meses): R$ {aposentadoria4}\n"
+                 f"Mensal (30 meses): R$ {aposentadoria5}"
+        )
+    except ValueError:
+        messagebox.showerror("Erro", "Por favor, insira valores válidos.")
+
+# Interface gráfica
+root = tk.Tk()
+root.title("Calculadora de Investimentos em Ações")
+
+# Widgets
+tk.Label(root, text="Investimento Inicial:").grid(row=0, column=0)
+entry_invest_inicial = tk.Entry(root)
+entry_invest_inicial.grid(row=0, column=1)
+
+tk.Label(root, text="Aporte Mensal:").grid(row=1, column=0)
+entry_aporte_mensal = tk.Entry(root)
+entry_aporte_mensal.grid(row=1, column=1)
+
+tk.Label(root, text="Anos de Investimento:").grid(row=2, column=0)
+entry_anos = tk.Entry(root)
+entry_anos.grid(row=2, column=1)
+
+tk.Label(root, text="Valor da Ação:").grid(row=3, column=0)
+entry_valor_acao = tk.Entry(root)
+entry_valor_acao.grid(row=3, column=1)
+
+tk.Label(root, text="Dividend Yield (%):").grid(row=4, column=0)
+entry_div_yield = tk.Entry(root)
+entry_div_yield.grid(row=4, column=1)
+
+tk.Label(root, text="Dividendo da Ação:").grid(row=5, column=0)
+entry_dividendo = tk.Entry(root)
+entry_dividendo.grid(row=5, column=1)
+
+tk.Button(root, text="Calcular", command=calcular).grid(row=6, columnspan=2)
+
+# Resultados
+resultado_teto = tk.Label(root, text="")
+resultado_teto.grid(row=7, columnspan=2)
+
+resultado_quant_acao = tk.Label(root, text="")
+resultado_quant_acao.grid(row=8, columnspan=2)
+
+resultado_yield_medio = tk.Label(root, text="")
+resultado_yield_medio.grid(row=9, columnspan=2)
+
+resultado_dividendo = tk.Label(root, text="")
+resultado_dividendo.grid(row=10, columnspan=2)
+
+resultado_valores = tk.Label(root, text="")
+resultado_valores.grid(row=11, columnspan=2)
+
+resultado_final_acao = tk.Label(root, text="")
+resultado_final_acao.grid(row=12, columnspan=2)
+
+resultado_aposentadoria = tk.Label(root, text="")
+resultado_aposentadoria.grid(row=13, columnspan=2)
+
+# Iniciar o loop da interface gráfica
+root.mainloop()
